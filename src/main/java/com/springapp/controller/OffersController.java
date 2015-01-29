@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,11 @@ public class OffersController {
     @Autowired
     private OffersService offersService;
 
+    @RequestMapping("scanemails")
+    public String scanEmails(ModelMap modelMap, @ModelAttribute("user") User user){
+
+        return null;
+    }
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String showTest(ModelMap model, @RequestParam("id") String id) {
         System.out.println("Id is:" + id);

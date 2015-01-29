@@ -3,6 +3,7 @@ package com.springapp.controller;
 import com.springapp.bean.Email;
 import com.springapp.bean.User;
 import com.springapp.service.UsersService;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.List;
 /**
  * Created by Chen on 15-01-18.
  */
+@SessionAttributes("user")
 @Controller
 public class LoginController {
     @Autowired
@@ -74,13 +78,14 @@ public class LoginController {
 
         System.out.println(user);
         model.addAttribute("email",new Email());
+        model.addAttribute("user",user);
         return "emailform";
     }
 
-
     @RequestMapping(value = "/addemail", method = RequestMethod.POST)
-    public String addEmail(Model model, @Valid Email email, BindingResult bindingResult){
+    public String addEmail(Model model, @Valid Email email, @ModelAttribute("user") User user, BindingResult bindingResult){
         System.out.println(email);
+        user.addEmail(email);
         return "accountcreated";
     }
 }

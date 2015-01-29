@@ -27,6 +27,7 @@
               <security:intercept-url pattern="/docreate" access="isAuthenticated()"></security:intercept-url>
               <security:intercept-url pattern="/offercreated" access="isAuthenticated()"></security:intercept-url>
               <security:intercept-url pattern="/offerdeleted" access="isAuthenticated()"></security:intercept-url>
+              <security:intercept-url pattern="/scanemails" access="isAuthenticated()"></security:intercept-url>
               <security:intercept-url pattern="/emailform" access="permitAll"></security:intercept-url>
               <security:intercept-url pattern="/addemail" access="permitAll"></security:intercept-url>
               <security:intercept-url pattern="/logout" access="permitAll"></security:intercept-url>

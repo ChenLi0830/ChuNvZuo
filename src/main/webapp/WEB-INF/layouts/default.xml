@@ -35,7 +35,7 @@
 
        <definition name="accountcreated" extends="offers.base" >
               <put-attribute name="title" value="Account Created"/>
-              <put-attribute name="content" value="Your account has been created successfully."/>
+              <put-attribute name="content" value="/WEB-INF/tiles/accountcreated.jsp"/>
        </definition>
 
        <definition name="admin" extends="offers.base" >
