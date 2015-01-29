@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd"
+       default-autowire="byName">
+
+
+    <context:annotation-config></context:annotation-config>
+    <context:component-scan base-package="com.springapp.test.config">
+    </context:component-scan>
+
+    <beans profile="dev">
+        <context:property-placeholder
+                location="classpath:com/test/java/com/springapp/test/config/jdbc.properties"/>
+
+        <!--注意这里id叫做dataSourceJNDI只是为了与security-context.xml一致，其实是个JDBC datasource-->
+        <bean id="dataSourceJNDI" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="${jdbc.driver}"/>
+            <property name="url" value="${jdbc.url}"/>
+            <property name="password" value="${jdbc.password}"/>
+            <property name="username" value="${jdbc.username}"/>
+        </bean>
+
+        <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+            <property name="dataSource" ref="dataSourceJNDI"/>
+            <property name="annotatedClasses">
+                <list>
+                    <value>com.springapp.bean.User</value>
+                    <value>com.springapp.bean.Offer</value>
+                </list>
+            </property>
+            <property name="hibernateProperties">
+                <props>
+                    <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                    <prop key="hibernate.show_sql">true</prop>
+                    <prop key="hibernate.hbm2ddl.auto">update</prop>
+                </props>
+            </property>
+        </bean>
+
+        <!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+            <!--<property name="dataSource" ref="dataSourceJNDI"/>-->
+        <!--</bean>-->
+        <!--<tx:annotation-driven/>-->
+
+        <bean id="transactionManagerHB"
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        </bean>
+
+        <tx:annotation-driven transaction-manager="transactionManagerHB"/>
+
+    </beans>
+
+
+
+</beans>

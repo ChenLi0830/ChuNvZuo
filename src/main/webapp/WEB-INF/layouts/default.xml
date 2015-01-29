@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+       <definition name="offers.base" template="/WEB-INF/tempaltes/default.jsp" >
+              <put-attribute name="title" value="Offers Homepage"/>
+              <put-attribute name="includes" value=""/>
+              <put-attribute name="header" value="/WEB-INF/tiles/header.jsp"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/content.jsp"/>
+              <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>
+       </definition>
+
+       <definition name="home" extends="offers.base" >
+              <put-attribute name="title" value="Offers Homepage"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/home.jsp"/>
+       </definition>
+
+       <definition name="offers" extends="offers.base" >
+              <put-attribute name="title" value="Current Offers"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/offers.jsp"/>
+       </definition>
+
+       <definition name="login" extends="offers.base" >
+              <put-attribute name="title" value="Login"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/login.jsp"/>
+       </definition>
+
+       <definition name="newaccount" extends="offers.base" >
+              <put-attribute name="title" value="New Account"/>
+              <put-attribute name="includes" value="/WEB-INF/tiles/newaccountscript.jsp"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/newaccount.jsp"/>
+       </definition>
+
+       <definition name="accountcreated" extends="offers.base" >
+              <put-attribute name="title" value="Account Created"/>
+              <put-attribute name="content" value="Your account has been created successfully."/>
+       </definition>
+
+       <definition name="admin" extends="offers.base" >
+              <put-attribute name="title" value="Admin"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/admin.jsp"/>
+       </definition>
+
+       <definition name="createoffer" extends="offers.base" >
+              <put-attribute name="title" value="Create Offer"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/createoffer.jsp"/>
+       </definition>
+
+       <definition name="error" extends="offers.base" >
+              <put-attribute name="title" value="Error"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/error.jsp"/>
+       </definition>
+
+       <definition name="logout" extends="offers.base" >
+              <put-attribute name="title" value="Logged Out"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/logout.jsp"/>
+       </definition>
+
+       <definition name="offercreated" extends="offers.base" >
+              <put-attribute name="title" value="Offer Created"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/offercreated.jsp"/>
+       </definition>
+       <definition name="offerdeleted" extends="offers.base" >
+              <put-attribute name="title" value="Offer deleted"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/offerdeleted.jsp"/>
+       </definition>
+       <definition name="emailform" extends="offers.base" >
+              <put-attribute name="title" value="Emails"/>
+              <put-attribute name="content" value="/WEB-INF/tiles/emailform.jsp"/>
+       </definition>
+</tiles-definitions>
