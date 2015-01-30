@@ -8,7 +8,10 @@ import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.search.AndTerm;
+import javax.mail.search.BodyTerm;
 import javax.mail.search.SearchTerm;
+import javax.mail.search.SubjectTerm;
 
 /**
  * Created by root on 1/29/15.
@@ -59,27 +62,36 @@ public class EmailSearcher {
             Folder folderInbox = store.getFolder("INBOX");
             folderInbox.open(Folder.READ_ONLY);
 
-            // creates a search criterion
-            SearchTerm searchCondition = new SearchTerm() {
-                @Override
-                public boolean match(Message message) {
-                    try {
-                        if (message.getSubject().contains(keyword)) {
-                            return true;
-                        }
-                    } catch (MessagingException ex) {
-                        ex.printStackTrace();
-                    }
-                    return false;
-                }
-            };
+//            // creates a search criterion
+//            SearchTerm searchCondition = new SearchTerm() {
+//                @Override
+//                public boolean match(Message message) {
+//                    try {
+//                        if (message.getSubject().contains(keyword)) {
+//                            return true;
+//                        }
+//                    } catch (MessagingException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                    return false;
+//                }
+//            };
+//
+//            // performs search through the folder
+//            Message[] foundMessages = folderInbox.search(searchCondition);
 
-            // performs search through the folder
-            Message[] foundMessages = folderInbox.search(searchCondition);
+            SearchTerm st = new AndTerm(
+                    new SubjectTerm("Confirmation of"),
+                    new BodyTerm("Thank you for your purchase!"));
+
+//            Message[] foundMessages = folderInbox.search(st);
+            Message[] foundMessages = folderInbox.getMessages();
+
 
             for (int i = 0; i < foundMessages.length; i++) {
                 Message message = foundMessages[i];
                 String subject = message.getSubject();
+//                Object body = message.getContent();
                 System.out.println("Found message #" + i + ": " + subject);
             }
 
@@ -98,8 +110,10 @@ public class EmailSearcher {
     public static void main(String[] args) {
         String host = "imap.gmail.com";
         String port = "993";
-        String userName = "ryan.lee0830@gmail.com";
-        String password = "Geoffery0830";
+//        String userName = "ryan.lee0830@gmail.com";
+//        String password = "Geoffery0830";
+        String userName = "lulugeo.li@gmail.com";
+        String password = "Wangwei19820510";
         EmailSearcher searcher = new EmailSearcher();
         String keyword = "JavaMail";
         searcher.searchEmail(host, port, userName, password, keyword);
