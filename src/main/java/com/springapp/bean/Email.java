@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -20,13 +21,13 @@ public class Email {
     @NotBlank
     private String password;
     @OneToMany
-    private List<PurchasedItem> purchasedItems = new ArrayList<PurchasedItem>();
+    private Collection<PurchasedItem> purchasedItems = new ArrayList<PurchasedItem>();
 
-    public List<PurchasedItem> getPurchasedItems() {
+    public Collection<PurchasedItem> getPurchasedItems() {
         return purchasedItems;
     }
 
-    public void setPurchasedItems(List<PurchasedItem> purchasedItems) {
+    public void setPurchasedItems(Collection<PurchasedItem> purchasedItems) {
         this.purchasedItems = purchasedItems;
     }
 
@@ -64,9 +65,11 @@ public class Email {
 
     public List<PurchasedItem> fetchEmail(){
         if (account.contains("gmail")){
-            new GoogleMailFetcher().start(account,password);
-            return this.purchasedItems;
+            return new GoogleMailFetcher().start(account, password);
+        } else {
+            //todo Make fetchEmail applicable to other email service, too.
+            System.out.println("Not gmail account!");
+            return null;
         }
-        return this.purchasedItems;
     }
 }

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -25,7 +26,7 @@ public class User {
     private String password;
 
     @OneToMany
-    private Collection<Email> emailList = new ArrayDeque<Email>();
+    private Collection<Email> emailList = new ArrayList<Email>();
 
     @NotBlank(message = "Name cannot be blank.")
     @Size(max = 60, min = 3, message = "Name must be between 3 and 60 characters long.")

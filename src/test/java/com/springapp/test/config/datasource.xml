@@ -31,6 +31,8 @@
                 <list>
                     <value>com.springapp.bean.User</value>
                     <value>com.springapp.bean.Offer</value>
+                    <value>com.springapp.bean.Email</value>
+                    <value>com.springapp.bean.PurchasedItem</value>
                 </list>
             </property>
             <property name="hibernateProperties">

@@ -285,13 +285,14 @@ public class GoogleMailFetcher {
 
     }
 
-    public void start(String username, String password) {
+    public List<PurchasedItem> start(String username, String password) {
         String host = "imap.gmail.com";// change accordingly
         String mailStoreType = "imap";
         String port = "993";
 
         //Call method fetch
         fetch(host, mailStoreType, port, username, password);
+        return purchasedItems;
     }
 
 //    public static void main(String[] args) {
