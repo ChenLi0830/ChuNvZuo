@@ -3,6 +3,7 @@ package com.springapp.bean;
 /**
  * Created by Chen on 15-01-29.
  */
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -11,9 +12,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.mail.Address;
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -23,14 +29,18 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimePart;
 import javax.mail.search.AndTerm;
 import javax.mail.search.BodyTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
 
-public class FetchingEmail {
+public class GoogleMailFetcher {
+    private List<PurchasedItem> purchasedItems = new ArrayList<PurchasedItem>();
+    private PurchasedItem purchasedItem;
 
-    public static void fetch(String host, String storeType, String port, String user,
+    public void fetch(String host, String storeType, String port, String user,
                              String password) {
         try {
             // create properties field
@@ -67,19 +77,14 @@ public class FetchingEmail {
 
             Message[] messages = emailFolder.search(st);
 
-//            Message[] messages = emailFolder.getMessages();
             System.out.println("messages.length---" + messages.length);
 
             for (int i = 0; i < messages.length; i++) {
+                purchasedItem = new PurchasedItem();
                 Message message = messages[i];
                 System.out.println("---------------------------------");
-                writePart(message);
-                String line = reader.readLine();
-                if ("YES".equals(line)) {
-                    message.writeTo(System.out);
-                } else if ("QUIT".equals(line)) {
-                    break;
-                }
+                writePart(message,"");
+                purchasedItems.add(purchasedItem);
             }
 
             // close the store and folder objects
@@ -96,26 +101,15 @@ public class FetchingEmail {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args) {
 
-        String host = "imap.gmail.com";// change accordingly
-        String mailStoreType = "imap";
-        String port = "993";
-        String username =
-                "lulugeo.li@gmail.com";// change accordingly
-        String password = "Wangwei19820510";// change accordingly
-
-        //Call method fetch
-        fetch(host, mailStoreType, port, username, password);
-
-    }
 
     /*
     * This method checks for content-type
     * based on which, it processes and
     * fetches the content of the message
     */
-    public static void writePart(Part p) throws Exception {
+
+    public void writePart(Part p, String ext) throws Exception {
         if (p instanceof Message)
             //Call methos writeEnvelope
             writeEnvelope((Message) p);
@@ -127,8 +121,65 @@ public class FetchingEmail {
         if (p.isMimeType("text/plain")) {
             System.out.println("This is plain text");
             System.out.println("---------------------------");
-            System.out.println((String) p.getContent());
+            String content = (String) p.getContent();
+            System.out.println(content);
+
+            Pattern namePattern = Pattern.compile("Item name  (.*)");
+            Matcher nameMatcher = namePattern.matcher(content);
+            if (nameMatcher.find())
+            {
+                String itemName = nameMatcher.group(1);
+                purchasedItem.setItemName(itemName);
+            }
+
+            Pattern urlPattern = Pattern.compile("Item URL:  (.*)");
+            Matcher urlMatcher = urlPattern.matcher(content);
+            if (urlMatcher.find())
+            {
+                String itemUrl = urlMatcher.group(1);
+                purchasedItem.setItemURL(itemUrl);
+            }
+
+//            System.out.println((String) p.getContent());
+        } else if (p.isMimeType("text/html")){
+            System.out.println("This is html text");
+            System.out.println("---------------------------");
+            String content = (String) p.getContent();
+            System.out.println(content);
+
+            Pattern imgPattern = Pattern.compile("src=\"([^<>]*?)\" border=\"0\" width=\"64\" height=\"64\"");
+            Matcher imgMatcher = imgPattern.matcher(content);
+            if (imgMatcher.find())
+            {
+                String imgURL = imgMatcher.group(1);
+                purchasedItem.setItemPicURL(imgURL);
+            }
         }
+
+        else if (p.isMimeType("multipart/related")) {
+            Multipart mp = (Multipart)p.getContent();
+//            Image image = null;
+            for (int i = 0; i < mp.getCount(); i++) {
+                Part bp = mp.getBodyPart(i);
+                if (bp.isMimeType("image/jpeg")) {
+                    writePart(bp, "jpg");
+                    continue;
+                }
+                else if (bp.isMimeType("image/gif")) {
+                    writePart(bp, "gif");
+                    continue;
+                }
+                else if (bp.isMimeType("image/bmp")) {
+                    writePart(bp, "bmp");
+                    continue;
+                }
+                else if (bp.isMimeType("image/png")) {
+                    writePart(bp, "png");
+                    continue;
+                }
+            }
+        }
+
         //check if the content has attachment
         else if (p.isMimeType("multipart/*")) {
             System.out.println("This is a Multipart");
@@ -136,20 +187,27 @@ public class FetchingEmail {
             Multipart mp = (Multipart) p.getContent();
             int count = mp.getCount();
             for (int i = 0; i < count; i++)
-                writePart(mp.getBodyPart(i));
+                writePart(mp.getBodyPart(i),"");
         }
         //check if the content is a nested message
         else if (p.isMimeType("message/rfc822")) {
             System.out.println("This is a Nested Message");
             System.out.println("---------------------------");
-            writePart((Part) p.getContent());
+            writePart((Part) p.getContent(),"");
         }
-        //check if the content is an inline image
-        else if (p.isMimeType("image/jpeg")) {
-            System.out.println("--------> image/jpeg");
-            Object o = p.getContent();
 
-            InputStream x = (InputStream) o;
+        //check if the content is an inline image
+        else if (p.isMimeType("image/*")) {
+            System.out.println("--------> image/*");
+//            Object o = p.getContent();
+
+//            InputStream x = (InputStream) o;
+            InputStream x = p.getInputStream();
+            BufferedImage im = ImageIO.read(x);
+            File imageFile = new File("/tmp/testImage2.jpg");
+            ImageIO.write(im,"jpg",imageFile);
+            x.close();
+
             // Construct the required byte array
             System.out.println("x.length = " + x.available());
             int i = 0;
@@ -187,11 +245,11 @@ public class FetchingEmail {
             else if (o instanceof InputStream) {
                 System.out.println("This is just an input stream");
                 System.out.println("---------------------------");
-                InputStream is = (InputStream) o;
-                is = (InputStream) o;
-                int c;
-                while ((c = is.read()) != -1)
-                    System.out.write(c);
+//                InputStream is = (InputStream) o;
+//                is = (InputStream) o;
+//                int c;
+//                while ((c = is.read()) != -1)
+//                    System.out.write(c);
             }
             else {
                 System.out.println("This is an unknown type");
@@ -227,4 +285,25 @@ public class FetchingEmail {
 
     }
 
+    public void start(String username, String password) {
+        String host = "imap.gmail.com";// change accordingly
+        String mailStoreType = "imap";
+        String port = "993";
+
+        //Call method fetch
+        fetch(host, mailStoreType, port, username, password);
+    }
+
+//    public static void main(String[] args) {
+//
+//        String host = "imap.gmail.com";// change accordingly
+//        String mailStoreType = "imap";
+//        String port = "993";
+//        String username =
+//                "lulugeo.li@gmail.com";// change accordingly
+//        String password = "Wangwei19820510";// change accordingly
+//
+//        //Call method fetch
+//        fetch(host, mailStoreType, port, username, password);
+//    }
 }

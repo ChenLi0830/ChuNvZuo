@@ -4,6 +4,9 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Chen on 15-01-28.
@@ -16,6 +19,16 @@ public class Email {
     private String account;
     @NotBlank
     private String password;
+    @OneToMany
+    private List<PurchasedItem> purchasedItems = new ArrayList<PurchasedItem>();
+
+    public List<PurchasedItem> getPurchasedItems() {
+        return purchasedItems;
+    }
+
+    public void setPurchasedItems(List<PurchasedItem> purchasedItems) {
+        this.purchasedItems = purchasedItems;
+    }
 
     public Email(String account, String password) {
         this.account = account;
@@ -47,5 +60,13 @@ public class Email {
                 "account='" + account + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public List<PurchasedItem> fetchEmail(){
+        if (account.contains("gmail")){
+            new GoogleMailFetcher().start(account,password);
+            return this.purchasedItems;
+        }
+        return this.purchasedItems;
     }
 }
