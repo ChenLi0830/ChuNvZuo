@@ -63,12 +63,6 @@ public class LoginController {
         user.setEnabled(true);
         user.setAuthority("ROLE_USER");
 
-        if (usersService.exists(user.getUsername())) {
-            System.out.println("caught username duplicate.");
-            bindingResult.rejectValue("username", "DuplicateKey.user.username", "This username already exists.");
-            return "newaccount";
-        }
-
         try {
             usersService.createUser(user);
         } catch (DuplicateKeyException ex) {
@@ -85,7 +79,15 @@ public class LoginController {
     @RequestMapping(value = "/addemail", method = RequestMethod.POST)
     public String addEmail(Model model, @Valid Email email, @ModelAttribute("user") User user, BindingResult bindingResult){
         System.out.println(email);
+
+        //todo implement
+        // emailService.save(email);
         user.addEmail(email);
+
+
         return "accountcreated";
     }
 }
+
+
+
