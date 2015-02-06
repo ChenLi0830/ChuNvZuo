@@ -49,6 +49,14 @@ public class User {
         addEmail(email);
     }
 
+    public User(String username, String password, String name, boolean enabled, String authority) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.enabled = enabled;
+        this.authority = authority;
+    }
+
     public String getUsername() {
         return username;
     }

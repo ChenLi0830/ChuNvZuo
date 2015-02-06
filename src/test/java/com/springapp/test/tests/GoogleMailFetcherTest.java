@@ -38,7 +38,9 @@ public class GoogleMailFetcherTest {
 
     private String username = "lulugeo.li@gmail.com";
     private String password = "Wangwei19820510";
-    Email lulugeoGmail = new Email(username,password);
+    private Email lulugeoGmail = new Email(username,password);
+//    private Email email1 = new Email("lulugeo.li@gmail.com","Geoffery0830");
+    private Email email2 = new Email("lulugeo.li@gmail.com","asdfjkl;");
 
     @Before
     public void init() {
@@ -52,6 +54,7 @@ public class GoogleMailFetcherTest {
     public void testFetchPurchasedItemList() {
         List<PurchasedItem> purchasedItems = new GoogleMailFetcher().start(username, password);
         System.out.println(purchasedItems);
+        System.out.println(purchasedItems.get(0).getItemURL());
         Assert.assertNotNull(purchasedItems);
         Assert.assertTrue(purchasedItems.size() > 6);
     }
@@ -64,6 +67,5 @@ public class GoogleMailFetcherTest {
         Assert.assertNotNull(purchasedItems);
         Assert.assertTrue(purchasedItems.size() > 6);
     }
-
-
 }
+

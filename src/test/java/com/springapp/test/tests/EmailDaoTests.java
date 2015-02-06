@@ -1,12 +1,11 @@
 package com.springapp.test.tests;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
-import javax.sql.DataSource;
-
 import com.springapp.bean.Email;
+import com.springapp.bean.Offer;
+import com.springapp.bean.User;
+import com.springapp.dao.EmailsDao;
+import com.springapp.dao.OffersDao;
+import com.springapp.dao.UsersDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +15,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.springapp.bean.Offer;
-import com.springapp.bean.User;
-import com.springapp.dao.OffersDao;
-import com.springapp.dao.UsersDao;
+import javax.sql.DataSource;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 @ActiveProfiles("dev")
 @ContextConfiguration(locations = {
@@ -28,10 +27,10 @@ import com.springapp.dao.UsersDao;
         "classpath:com/test/java/com/springapp/test/config/datasource.xml"})
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class OfferDaoTests {
+public class EmailDaoTests {
 
     @Autowired
-    private OffersDao offersDao;
+    private EmailsDao emailsDao;
 
     @Autowired
     private UsersDao usersDao;
@@ -40,48 +39,39 @@ public class OfferDaoTests {
     private DataSource dataSource;
 
     private Email email1 = new Email("lulugeo.li@gmail.com","Wangwei19820510");
-    private Email email2 = new Email("lulugeo.li@gmail.com","asdfjkl;");
+    private Email emailUpdate1 = new Email("lulugeo.li@gmail.com","abc123");
+    private Email email2 = new Email("yichen.li0830@gmail.com","asdfjkl;");
+    private Email email3 = new Email("chen.li@mun.ca","aaa;");
 
 
     private User user1 = new User("johnwpurcell", "John Purcell", "hellothere",
             email1, true, "ROLE_USER");
-    private User user2 = new User("richardhannay", "Richard Hannay", "the39steps",
-            email1, true, "ROLE_ADMIN");
-    private User user3 = new User("suetheviolinist", "Sue Black", "iloveviolins",
-            email2, true, "ROLE_USER");
-    private User user4 = new User("rogerblake", "Rog Blake", "liberator",
-            email2, false, "user");
-
-    private Offer offer1 = new Offer(user1, "This is a test offer.");
-    private Offer offer2 = new Offer(user1, "This is another test offer.");
-    private Offer offer3 = new Offer(user2, "This is yet another test offer.");
-    private Offer offer4 = new Offer(user3, "This is a test offer once again.");
-    private Offer offer5 = new Offer(user3,
-            "Here is an interesting offer of some kind.");
-    private Offer offer6 = new Offer(user3, "This is just a test offer.");
-    private Offer offer7 = new Offer(user4,
-            "This is a test offer for a user that is not enabled.");
+    private User user2 = new User("richardhannay", "Richard Hannay", "the39steps", email2, true, "ROLE_ADMIN");
+    private User user3 = new User("suetheviolinist", "Sue Black", "iloveviolins", true, "ROLE_USER");
+    private User user4 = new User("rogerblake", "Rog Blake", "liberator", false, "user");
 
     @Before
     public void init() {
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 
+        jdbc.execute("delete from Email_PurchasedItem");
+        jdbc.execute("delete from users_Email");
+        jdbc.execute("delete from PurchasedItem");
         jdbc.execute("delete from offers");
         jdbc.execute("delete from users");
+        jdbc.execute("delete from Email");
     }
 
+/*
     @Test
     public void testDelete() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
-        offersDao.saveOrUpdate(offer2);
-        offersDao.saveOrUpdate(offer3);
-        offersDao.saveOrUpdate(offer4);
-        offersDao.saveOrUpdate(offer5);
-        offersDao.saveOrUpdate(offer6);
-        offersDao.saveOrUpdate(offer7);
+        emailsDao.saveOrUpdate(email1);
+        emailsDao.saveOrUpdate(email2);
+        emailsDao.saveOrUpdate(email3);
+
+        Email retrievedEmail1 = emailsDao.getEmail(email1.getAccount());
+        assertEquals("Retrieved email should be the same as the saved email",email1, retrievedEmail1);
+
 
         Offer retrieved1 = offersDao.getOffer(offer2.getId());
         assertNotNull("Offer with ID " + retrieved1.getId() + " should not be null (deleted, actual)", retrieved1);
@@ -91,27 +81,64 @@ public class OfferDaoTests {
         Offer retrieved2 = offersDao.getOffer(offer2.getId());
         assertNull("Offer with ID " + retrieved1.getId() + " should be null (deleted, actual)", retrieved2);
     }
+*/
 
     @Test
     public void testGetById() {
+        emailsDao.saveOrUpdate(email1);
+        emailsDao.saveOrUpdate(email2);
+        emailsDao.saveOrUpdate(email3);
+
+        Email retrievedEmail1 = emailsDao.getEmail(email1.getAccount());
+        assertEquals("Retrieved email should be the same as the saved email", email1.getAccount(), retrievedEmail1.getAccount());
+        assertEquals("Retrieved email should be the same as the saved email", email1.getPassword(), retrievedEmail1.getPassword());
+
+//        Email retrievedEmail2 = emailsDao.getEmail(email2.getAccount());
+//        assertNull("Should not retrieve offer for disabled user.", retrieved2);
+    }
+
+    @Test
+    public void testUpdate() {
+        emailsDao.saveOrUpdate(email1);
+        emailsDao.saveOrUpdate(email2);
+        emailsDao.saveOrUpdate(email3);
+        emailsDao.saveOrUpdate(emailUpdate1);
+
+        Email retrievedEmail1 = emailsDao.getEmail(email1.getAccount());
+        assertEquals("Retrieved email should be the same as the updated email", emailUpdate1.getAccount(), retrievedEmail1.getAccount());
+        assertEquals("Retrieved email should be the same as the updated email", emailUpdate1.getPassword(), retrievedEmail1.getPassword());
+//        Email retrievedEmail2 = emailsDao.getEmail(email2.getAccount());
+//        assertNull("Should not retrieve offer for disabled user.", retrieved2);
+    }
+
+
+    @Test
+    public void testGetByUser() {
+        emailsDao.saveOrUpdate(email1);
+        emailsDao.saveOrUpdate(email2);
+        emailsDao.saveOrUpdate(email3);
+
         usersDao.create(user1);
         usersDao.create(user2);
         usersDao.create(user3);
         usersDao.create(user4);
-        offersDao.saveOrUpdate(offer1);
-        offersDao.saveOrUpdate(offer2);
-        offersDao.saveOrUpdate(offer3);
-        offersDao.saveOrUpdate(offer4);
-        offersDao.saveOrUpdate(offer5);
-        offersDao.saveOrUpdate(offer6);
-        offersDao.saveOrUpdate(offer7);
 
-        Offer retrieved1 = offersDao.getOffer(offer1.getId());
-        assertEquals("Offers should match", offer1, retrieved1);
+        List<Email> retrievedEmailList = (List<Email>) user1.getEmailList();
+        assertTrue("Retrieved list should have one email", retrievedEmailList.size()==1);
 
-        Offer retrieved2 = offersDao.getOffer(offer7.getId());
-        assertNull("Should not retrieve offer for disabled user.", retrieved2);
+        user1.addEmail(email3);
+        usersDao.create(user1);
+        retrievedEmailList = (List<Email>) user1.getEmailList();
+        assertTrue("Retrieved list should have two email", retrievedEmailList.size()==2);
+
+        List<Email> retrievedEmailList3 = (List<Email>) user3.getEmailList();
+        assertTrue("Retrieved list should have one email", retrievedEmailList3.size() == 0);
+
     }
+
+/*
+
+
 
     @Test
     public void testCreateRetrieve() {
@@ -185,6 +212,7 @@ public class OfferDaoTests {
         List<Offer> offers3 = offersDao.getOffers(user2.getUsername());
         assertEquals("Should be 1 offer for this user.", 1, offers3.size());
     }
+*/
 
 
 

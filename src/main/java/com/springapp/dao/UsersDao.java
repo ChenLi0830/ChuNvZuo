@@ -1,5 +1,6 @@
 package com.springapp.dao;
 
+import com.springapp.bean.Email;
 import com.springapp.bean.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -34,7 +35,7 @@ public class UsersDao {
     public void create(User user) {
         Session session = session();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        session.save(user);
+        session.saveOrUpdate(user);
     }
 
     public boolean exists(String username) {
@@ -49,4 +50,9 @@ public class UsersDao {
     public List<User> getAllUsers() {
         return session().createQuery("from User").list();
     }
+
+//    public List<Email> getEmails(String username){
+//        Criteria criteria = session().createCriteria(Email.class);
+//
+//    }
 }

@@ -156,7 +156,7 @@ public class GoogleMailFetcher {
             }
         }
 
-        else if (p.isMimeType("multipart/related")) {
+        /*else if (p.isMimeType("multipart/related")) {
             Multipart mp = (Multipart)p.getContent();
 //            Image image = null;
             for (int i = 0; i < mp.getCount(); i++) {
@@ -178,7 +178,7 @@ public class GoogleMailFetcher {
                     continue;
                 }
             }
-        }
+        }*/
 
         //check if the content has attachment
         else if (p.isMimeType("multipart/*")) {
@@ -196,9 +196,9 @@ public class GoogleMailFetcher {
             writePart((Part) p.getContent(),"");
         }
 
-        //check if the content is an inline image
-        else if (p.isMimeType("image/*")) {
-            System.out.println("--------> image/*");
+/*        //check if the content is an inline image
+        else if (p.isMimeType("image*//*")) {
+            System.out.println("--------> image*//*");
 //            Object o = p.getContent();
 
 //            InputStream x = (InputStream) o;
@@ -234,7 +234,7 @@ public class GoogleMailFetcher {
             while ((bytesRead = test.read(buffer)) != -1) {
                 output.write(buffer, 0, bytesRead);
             }
-        }
+        }*/
         else {
             Object o = p.getContent();
             if (o instanceof String) {

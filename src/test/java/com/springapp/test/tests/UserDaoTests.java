@@ -35,7 +35,7 @@ public class UserDaoTests {
 	@Autowired
 	private DataSource dataSource;
 
-	private Email email1 = new Email("lulugeo.li@gmail.com","Geoffery0830");
+	private Email email1 = new Email("lulugeo.li@gmail.com","Wangwei19820510");
 	private Email email2 = new Email("lulugeo.li@gmail.com","asdfjkl;");
 
 

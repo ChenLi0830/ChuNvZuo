@@ -15,6 +15,17 @@ public class PurchasedItem {
     private int id;
     private String itemName;
     private String itemURL;
+
+    @Override
+    public String toString() {
+        return "PurchasedItem{" +
+                "id=" + id +
+                ", itemName='" + itemName + '\'' +
+                ", itemURL='" + itemURL + '\'' +
+                ", itemPicURL='" + itemPicURL + '\'' +
+                '}';
+    }
+
     private String itemPicURL;
 
     public String getItemName() {

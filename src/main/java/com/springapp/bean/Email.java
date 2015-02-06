@@ -2,9 +2,7 @@ package com.springapp.bean;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +19,7 @@ public class Email {
     @NotBlank
     private String password;
     @OneToMany
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection<PurchasedItem> purchasedItems = new ArrayList<PurchasedItem>();
 
     public Collection<PurchasedItem> getPurchasedItems() {
