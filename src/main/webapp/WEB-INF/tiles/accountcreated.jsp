@@ -2,4 +2,4 @@
 
 Account created.
 
-<a href="${pageContext.request.contextPath}/scanemails">Click here to sell your items.</a>
+<a href="${pageContext.request.contextPath}/login">Click here to login.</a>

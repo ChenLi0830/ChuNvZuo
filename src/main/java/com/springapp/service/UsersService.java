@@ -19,12 +19,16 @@ public class UsersService {
     private UsersDao usersDao;
 
     public void createUser(User user) {
-        usersDao.create(user);
+        usersDao.saveOrUpdate(user);
 //        offersDao.saveOrUpdate(offer);
     }
 
     public boolean exists(String username) {
         return usersDao.exists(username);
+    }
+
+    public User getUserByName(String username){
+        return usersDao.getUser(username);
     }
 
     @Secured("ROLE_ADMIN")

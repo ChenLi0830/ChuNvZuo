@@ -72,17 +72,17 @@ public class GoogleMailFetcher {
             // retrieve the messages from the folder in an array and print it
 
             SearchTerm st = new AndTerm(
-                    new SubjectTerm("Confirmation of"),
+                    new SubjectTerm("Confirmation of your Order"),
                     new BodyTerm("Thank you for your purchase!"));
 
             Message[] messages = emailFolder.search(st);
 
-            System.out.println("messages.length---" + messages.length);
+            //System.out.println("messages.length---" + messages.length);
 
             for (int i = 0; i < messages.length; i++) {
                 purchasedItem = new PurchasedItem();
                 Message message = messages[i];
-                System.out.println("---------------------------------");
+                //System.out.println("---------------------------------");
                 writePart(message,"");
                 purchasedItems.add(purchasedItem);
             }
@@ -114,15 +114,15 @@ public class GoogleMailFetcher {
             //Call methos writeEnvelope
             writeEnvelope((Message) p);
 
-        System.out.println("----------------------------");
-        System.out.println("CONTENT-TYPE: " + p.getContentType());
+        //System.out.println("----------------------------");
+        //System.out.println("CONTENT-TYPE: " + p.getContentType());
 
         //check if the content is plain text
         if (p.isMimeType("text/plain")) {
-            System.out.println("This is plain text");
-            System.out.println("---------------------------");
+            //System.out.println("This is plain text");
+            //System.out.println("---------------------------");
             String content = (String) p.getContent();
-            System.out.println(content);
+            //System.out.println(content);
 
             Pattern namePattern = Pattern.compile("Item name  (.*)");
             Matcher nameMatcher = namePattern.matcher(content);
@@ -140,12 +140,12 @@ public class GoogleMailFetcher {
                 purchasedItem.setItemURL(itemUrl);
             }
 
-//            System.out.println((String) p.getContent());
+//            //System.out.println((String) p.getContent());
         } else if (p.isMimeType("text/html")){
-            System.out.println("This is html text");
-            System.out.println("---------------------------");
+            //System.out.println("This is html text");
+            //System.out.println("---------------------------");
             String content = (String) p.getContent();
-            System.out.println(content);
+            //System.out.println(content);
 
             Pattern imgPattern = Pattern.compile("src=\"([^<>]*?)\" border=\"0\" width=\"64\" height=\"64\"");
             Matcher imgMatcher = imgPattern.matcher(content);
@@ -182,8 +182,8 @@ public class GoogleMailFetcher {
 
         //check if the content has attachment
         else if (p.isMimeType("multipart/*")) {
-            System.out.println("This is a Multipart");
-            System.out.println("---------------------------");
+            //System.out.println("This is a Multipart");
+            //System.out.println("---------------------------");
             Multipart mp = (Multipart) p.getContent();
             int count = mp.getCount();
             for (int i = 0; i < count; i++)
@@ -191,14 +191,14 @@ public class GoogleMailFetcher {
         }
         //check if the content is a nested message
         else if (p.isMimeType("message/rfc822")) {
-            System.out.println("This is a Nested Message");
-            System.out.println("---------------------------");
+            //System.out.println("This is a Nested Message");
+            //System.out.println("---------------------------");
             writePart((Part) p.getContent(),"");
         }
 
 /*        //check if the content is an inline image
         else if (p.isMimeType("image*//*")) {
-            System.out.println("--------> image*//*");
+            //System.out.println("--------> image*//*");
 //            Object o = p.getContent();
 
 //            InputStream x = (InputStream) o;
@@ -209,7 +209,7 @@ public class GoogleMailFetcher {
             x.close();
 
             // Construct the required byte array
-            System.out.println("x.length = " + x.available());
+            //System.out.println("x.length = " + x.available());
             int i = 0;
             byte[] bArray = new byte[x.available()];
 
@@ -222,7 +222,7 @@ public class GoogleMailFetcher {
             f2.write(bArray);
         }
         else if (p.getContentType().contains("image/")) {
-            System.out.println("content type" + p.getContentType());
+            //System.out.println("content type" + p.getContentType());
             File f = new File("image" + new Date().getTime() + ".jpg");
             DataOutputStream output = new DataOutputStream(
                     new BufferedOutputStream(new FileOutputStream(f)));
@@ -235,16 +235,16 @@ public class GoogleMailFetcher {
                 output.write(buffer, 0, bytesRead);
             }
         }*/
-        else {
+        /*else {
             Object o = p.getContent();
             if (o instanceof String) {
-                System.out.println("This is a string");
-                System.out.println("---------------------------");
-                System.out.println((String) o);
+                //System.out.println("This is a string");
+                //System.out.println("---------------------------");
+                //System.out.println((String) o);
             }
             else if (o instanceof InputStream) {
-                System.out.println("This is just an input stream");
-                System.out.println("---------------------------");
+                //System.out.println("This is just an input stream");
+                //System.out.println("---------------------------");
 //                InputStream is = (InputStream) o;
 //                is = (InputStream) o;
 //                int c;
@@ -252,19 +252,19 @@ public class GoogleMailFetcher {
 //                    System.out.write(c);
             }
             else {
-                System.out.println("This is an unknown type");
-                System.out.println("---------------------------");
-                System.out.println(o.toString());
+                //System.out.println("This is an unknown type");
+                //System.out.println("---------------------------");
+                //System.out.println(o.toString());
             }
-        }
+        }*/
 
     }
     /*
     * This method would print FROM,TO and SUBJECT of the message
     */
     public static void writeEnvelope(Message m) throws Exception {
-        System.out.println("This is the message envelope");
-        System.out.println("---------------------------");
+        //System.out.println("This is the message envelope");
+        //System.out.println("---------------------------");
         Address[] a;
 
         // FROM

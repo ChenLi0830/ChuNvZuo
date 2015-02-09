@@ -1,14 +1,12 @@
 package com.springapp.bean;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by Chen on 15-02-03.
  */
 @Entity
+//@Table(name = "purchasedItems")
 public class PurchasedItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -50,5 +48,27 @@ public class PurchasedItem {
 
     public void setItemPicURL(String itemPicURL) {
         this.itemPicURL = itemPicURL;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PurchasedItem)) return false;
+
+        PurchasedItem that = (PurchasedItem) o;
+
+        if (itemName != null ? !itemName.equals(that.itemName) : that.itemName != null) return false;
+        if (itemPicURL != null ? !itemPicURL.equals(that.itemPicURL) : that.itemPicURL != null) return false;
+        if (itemURL != null ? !itemURL.equals(that.itemURL) : that.itemURL != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = itemName != null ? itemName.hashCode() : 0;
+        result = 31 * result + (itemURL != null ? itemURL.hashCode() : 0);
+        result = 31 * result + (itemPicURL != null ? itemPicURL.hashCode() : 0);
+        return result;
     }
 }

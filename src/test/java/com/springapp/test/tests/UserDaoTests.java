@@ -52,23 +52,27 @@ public class UserDaoTests {
 	public void init() {
 		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 
-		jdbc.execute("delete from offers");
-		jdbc.execute("delete from users");
+		jdbc.execute("delete from user_email");
+		jdbc.execute("delete from purchasedItem");
+		jdbc.execute("delete from offer");
+		jdbc.execute("delete from user");
+		jdbc.execute("delete from email");
 	}
 	
 	@Test
 	public void testCreateRetrieve() {
-		usersDao.create(user1);
+		usersDao.saveOrUpdate(user1);
 		
 		List<User> users1 = usersDao.getAllUsers();
 		
 		assertEquals("One user should have been created and retrieved", 1, users1.size());
 		
 		assertEquals("Inserted user should match retrieved", user1, users1.get(0));
+
 		
-		usersDao.create(user2);
-		usersDao.create(user3);
-		usersDao.create(user4);
+		usersDao.saveOrUpdate(user2);
+		usersDao.saveOrUpdate(user3);
+		usersDao.saveOrUpdate(user4);
 		
 		List<User> users2 = usersDao.getAllUsers();
 		
@@ -77,9 +81,9 @@ public class UserDaoTests {
 	
 	@Test
 	public void testExists() {
-		usersDao.create(user1);
-		usersDao.create(user2);
-		usersDao.create(user3);
+		usersDao.saveOrUpdate(user1);
+		usersDao.saveOrUpdate(user2);
+		usersDao.saveOrUpdate(user3);
 		
 		assertTrue("User should exist.", usersDao.exists(user2.getUsername()));
 		assertFalse("User should not exist.", usersDao.exists("xkjhsfjlsjf"));

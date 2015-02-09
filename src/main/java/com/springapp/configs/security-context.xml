@@ -15,8 +15,8 @@
 
               <security:authentication-provider >
                      <security:jdbc-user-service data-source-ref="dataSourceJNDI"
-                            authorities-by-username-query="select username, authority from users where binary username = ?"
-                            users-by-username-query="select username, password, enabled from users where binary username = ?" />
+                            authorities-by-username-query="select username, authority from user where binary username = ?"
+                            users-by-username-query="select username, password, enabled from user where binary username = ?" />
                      <security:password-encoder ref="passwordEncoder"/>
               </security:authentication-provider>
        </security:authentication-manager>

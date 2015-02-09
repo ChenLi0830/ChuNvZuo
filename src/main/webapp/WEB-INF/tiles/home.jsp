@@ -27,6 +27,33 @@
 	</c:otherwise>
 </c:choose>
 
+
+<table class="offers">
+	<tr><td>Name</td>
+		<%--<td>Email</td>--%>
+		<td>Text</td></tr>
+	<c:forEach var="purchasedItem" items="${purchasedItemList}">
+		<%--Id = ${offer.id}--%>
+		<%--<c:out value="${item.id}"></c:out><br/>--%>
+		<tr>
+			<td><c:out value="${purchasedItem.itemName}"></c:out></td>
+				<%--<td><c:out value="${offer.user.email}"></c:out></td>--%>
+			<td><c:out value="${purchasedItem.itemURL}"></c:out></td>
+			<td><c:out value="${purchasedItem.itemPicURL}"></c:out></td>
+		</tr>
+	</c:forEach>
+	<br/>
+</table>
+
+<c:choose>
+	<c:when test="${hasItems==true}">
+		<p><a href="${pageContext.request.contextPath}/emailform">Edit your email.</a></p>
+	</c:when>
+	<c:otherwise>
+		<p><a href="${pageContext.request.contextPath}/emailform">Add a new email.</a></p>
+	</c:otherwise>
+</c:choose>
+
 <sec:authorize access="hasRole('ROLE_ADMIN')">
 	<p><a href="<c:url value='/admin'/>">Admin</a></p>
 </sec:authorize>

@@ -30,7 +30,8 @@
             </property>
             <property name="packagesToScan">
                 <list>
-                    <value>com.springapp.bean</value>
+                    <value>com.springapp</value>
+                    <!--<value>com.springapp.bean</value>-->
                 </list>
             </property>
         </bean>

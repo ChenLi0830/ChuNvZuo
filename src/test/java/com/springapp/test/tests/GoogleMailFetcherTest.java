@@ -61,7 +61,7 @@ public class GoogleMailFetcherTest {
 
     @Test
     public void testGetItemList() {
-        List<PurchasedItem> purchasedItems = lulugeoGmail.fetchEmail();
+        List<PurchasedItem> purchasedItems = lulugeoGmail.fetchPurchasedItem();
 
         System.out.println(purchasedItems);
         Assert.assertNotNull(purchasedItems);

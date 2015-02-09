@@ -2,10 +2,12 @@ package com.springapp.test.tests;
 
 import com.springapp.bean.Email;
 import com.springapp.bean.Offer;
+import com.springapp.bean.PurchasedItem;
 import com.springapp.bean.User;
 import com.springapp.dao.EmailsDao;
 import com.springapp.dao.OffersDao;
 import com.springapp.dao.UsersDao;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,12 +56,12 @@ public class EmailDaoTests {
     public void init() {
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 
-        jdbc.execute("delete from Email_PurchasedItem");
-        jdbc.execute("delete from users_Email");
-        jdbc.execute("delete from PurchasedItem");
-        jdbc.execute("delete from offers");
-        jdbc.execute("delete from users");
-        jdbc.execute("delete from Email");
+        jdbc.execute("delete from user_email");
+        jdbc.execute("delete from user_purchaseditem");
+        jdbc.execute("delete from purchasedItem");
+        jdbc.execute("delete from offer");
+        jdbc.execute("delete from user");
+        jdbc.execute("delete from email");
     }
 
 /*
@@ -84,17 +86,14 @@ public class EmailDaoTests {
 */
 
     @Test
-    public void testGetById() {
+    public void testGetByAccount() {
         emailsDao.saveOrUpdate(email1);
         emailsDao.saveOrUpdate(email2);
         emailsDao.saveOrUpdate(email3);
 
         Email retrievedEmail1 = emailsDao.getEmail(email1.getAccount());
-        assertEquals("Retrieved email should be the same as the saved email", email1.getAccount(), retrievedEmail1.getAccount());
-        assertEquals("Retrieved email should be the same as the saved email", email1.getPassword(), retrievedEmail1.getPassword());
+        assertEquals("Retrieved email should be the same as the saved email", email1, retrievedEmail1);
 
-//        Email retrievedEmail2 = emailsDao.getEmail(email2.getAccount());
-//        assertNull("Should not retrieve offer for disabled user.", retrieved2);
     }
 
     @Test
@@ -105,7 +104,7 @@ public class EmailDaoTests {
         emailsDao.saveOrUpdate(emailUpdate1);
 
         Email retrievedEmail1 = emailsDao.getEmail(email1.getAccount());
-        assertEquals("Retrieved email should be the same as the updated email", emailUpdate1.getAccount(), retrievedEmail1.getAccount());
+        assertEquals("Retrieved email should be the same as the updated email", emailUpdate1, retrievedEmail1);
         assertEquals("Retrieved email should be the same as the updated email", emailUpdate1.getPassword(), retrievedEmail1.getPassword());
 //        Email retrievedEmail2 = emailsDao.getEmail(email2.getAccount());
 //        assertNull("Should not retrieve offer for disabled user.", retrieved2);
@@ -118,23 +117,75 @@ public class EmailDaoTests {
         emailsDao.saveOrUpdate(email2);
         emailsDao.saveOrUpdate(email3);
 
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
 
         List<Email> retrievedEmailList = (List<Email>) user1.getEmailList();
         assertTrue("Retrieved list should have one email", retrievedEmailList.size()==1);
 
         user1.addEmail(email3);
-        usersDao.create(user1);
+        usersDao.saveOrUpdate(user1);
         retrievedEmailList = (List<Email>) user1.getEmailList();
         assertTrue("Retrieved list should have two email", retrievedEmailList.size()==2);
 
         List<Email> retrievedEmailList3 = (List<Email>) user3.getEmailList();
         assertTrue("Retrieved list should have one email", retrievedEmailList3.size() == 0);
 
+        List<User> userList = usersDao.getAllUsers();
+        User userRetrieved1 = userList.get(1);
+//        User userRetrieved1 = usersDao.getUser(user1.getUsername());
+//        List<Email> emailList = (List<Email>) userRetrieved1.getEmailList();
+        System.out.println(userRetrieved1.getEmailList());
+        assertEquals("UserRetrieved should be the same as the User1", userList.get(0), user1);
     }
+
+    @Test
+    public void testAddPurchasedItems(){
+        emailsDao.saveOrUpdate(email1);
+        emailsDao.saveOrUpdate(email2);
+        emailsDao.saveOrUpdate(email3);
+
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
+
+        List<Email> retrievedEmailList = (List<Email>) user1.getEmailList();
+        for (Email email: retrievedEmailList){
+            List<PurchasedItem> purchasedItems = email.fetchPurchasedItem();
+            usersDao.addPurchasedItemList(purchasedItems);
+            user1.addPurchasedItems(purchasedItems);
+        }
+        usersDao.saveOrUpdate(user1);
+    }
+
+    @Test
+    public void testRetrievePurchasedItems(){
+        emailsDao.saveOrUpdate(email1);
+        emailsDao.saveOrUpdate(email2);
+        emailsDao.saveOrUpdate(email3);
+
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
+
+        List<Email> retrievedEmailList = (List<Email>) user1.getEmailList();
+        for (Email email: retrievedEmailList){
+            List<PurchasedItem> purchasedItems = email.fetchPurchasedItem();
+            usersDao.addPurchasedItemList(purchasedItems);
+            user1.addPurchasedItems(purchasedItems);
+        }
+        usersDao.saveOrUpdate(user1);
+
+        User retrievedUser1 = usersDao.getUser(user1.getUsername());
+
+        assertEquals("UserRetrieved should be the same as the User1", retrievedUser1, user1);
+    }
+
+
 
 /*
 
@@ -142,10 +193,10 @@ public class EmailDaoTests {
 
     @Test
     public void testCreateRetrieve() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
 
         offersDao.saveOrUpdate(offer1);
 
@@ -170,10 +221,10 @@ public class EmailDaoTests {
 
     @Test
     public void testUpdate() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
         offersDao.saveOrUpdate(offer2);
         offersDao.saveOrUpdate(offer3);
         offersDao.saveOrUpdate(offer4);
@@ -190,10 +241,10 @@ public class EmailDaoTests {
 
     @Test
     public void testGetUsername() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
 
         offersDao.saveOrUpdate(offer1);
         offersDao.saveOrUpdate(offer2);

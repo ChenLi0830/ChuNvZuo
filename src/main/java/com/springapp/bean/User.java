@@ -1,11 +1,11 @@
 package com.springapp.bean;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayDeque;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@Table(name = "users")
+//@Table(name = "users")
 public class User {
     @Id
     @NotBlank(message = "User name cannot be blank.")
@@ -25,7 +25,9 @@ public class User {
     @Size(min = 5, max = 80, message = "Password must be between 5 and 80 characters long.")
     private String password;
 
-    @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(name="users_emails", joinColumns=@JoinColumn(name="user_name"),inverseJoinColumns=@JoinColumn(name="email_account"))
     private Collection<Email> emailList = new ArrayList<Email>();
 
     @NotBlank(message = "Name cannot be blank.")
@@ -34,6 +36,18 @@ public class User {
     private boolean enabled = false;
     private String authority;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(name="users_purchasedItems", joinColumns=@JoinColumn(name="user_name"),inverseJoinColumns=@JoinColumn(name="purchasedItem_id"))
+    private Collection<PurchasedItem> purchasedItems = new ArrayList<PurchasedItem>();
+
+    public Collection<PurchasedItem> getPurchasedItems() {
+        return purchasedItems;
+    }
+
+    public void addPurchasedItems(Collection<PurchasedItem> purchasedItems) {
+        this.purchasedItems.addAll(purchasedItems);
+    }
 
     public User() {
 
@@ -108,5 +122,30 @@ public class User {
 
     public void addEmail(Email email) {
         this.emailList.add(email);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (enabled != user.enabled) return false;
+        if (authority != null ? !authority.equals(user.authority) : user.authority != null) return false;
+        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + (emailList != null ? emailList.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (enabled ? 1 : 0);
+        result = 31 * result + (authority != null ? authority.hashCode() : 0);
+        return result;
     }
 }

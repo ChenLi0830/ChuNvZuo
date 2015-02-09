@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by Chen on 15-01-18.
  */
-@SessionAttributes("user")
+//@SessionAttributes("user")
 @Controller
 public class LoginController {
     @Autowired
@@ -30,7 +30,6 @@ public class LoginController {
 
     @RequestMapping("/login")
     public String showLogin() {
-
         return "login";
     }
 
@@ -73,20 +72,21 @@ public class LoginController {
         System.out.println(user);
         model.addAttribute("email",new Email());
         model.addAttribute("user",user);
-        return "emailform";
-    }
-
-    @RequestMapping(value = "/addemail", method = RequestMethod.POST)
-    public String addEmail(Model model, @Valid Email email, @ModelAttribute("user") User user, BindingResult bindingResult){
-        System.out.println(email);
-
-        //todo implement
-        // emailService.save(email);
-        user.addEmail(email);
-
 
         return "accountcreated";
     }
+
+
+
+//    @RequestMapping(value = "/addemail", method = RequestMethod.POST)
+//    public String addEmail(Model model, @Valid Email email, @ModelAttribute("user") User user, BindingResult bindingResult){
+//        System.out.println(email);
+//
+//        //todo implement
+//        // emailService.save(email);
+//        user.addEmail(email);
+//        return "accountcreated";
+//    }
 }
 
 

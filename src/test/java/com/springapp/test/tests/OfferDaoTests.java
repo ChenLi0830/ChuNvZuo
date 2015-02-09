@@ -40,17 +40,17 @@ public class OfferDaoTests {
     private DataSource dataSource;
 
     private Email email1 = new Email("lulugeo.li@gmail.com","Wangwei19820510");
-    private Email email2 = new Email("lulugeo.li@gmail.com","asdfjkl;");
+    private Email email2 = new Email("chen.li@gmail.com","asdfjkl;");
 
 
     private User user1 = new User("johnwpurcell", "John Purcell", "hellothere",
-            email1, true, "ROLE_USER");
+            true, "ROLE_USER");
     private User user2 = new User("richardhannay", "Richard Hannay", "the39steps",
-            email1, true, "ROLE_ADMIN");
+            true, "ROLE_ADMIN");
     private User user3 = new User("suetheviolinist", "Sue Black", "iloveviolins",
-            email2, true, "ROLE_USER");
+            true, "ROLE_USER");
     private User user4 = new User("rogerblake", "Rog Blake", "liberator",
-            email2, false, "user");
+            false, "user");
 
     private Offer offer1 = new Offer(user1, "This is a test offer.");
     private Offer offer2 = new Offer(user1, "This is another test offer.");
@@ -66,16 +66,27 @@ public class OfferDaoTests {
     public void init() {
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 
-        jdbc.execute("delete from offers");
-        jdbc.execute("delete from users");
+//        jdbc.execute("delete from user_purchasedItem");
+        jdbc.execute("delete from user_email");
+        jdbc.execute("delete from purchasedItem");
+        jdbc.execute("delete from offer");
+        jdbc.execute("delete from user");
+        jdbc.execute("delete from email");
+
+//        jdbc.execute("delete from users_purchasedItems");
+//        jdbc.execute("delete from users_emails");
+//        jdbc.execute("delete from purchasedItem");
+//        jdbc.execute("delete from offers");
+//        jdbc.execute("delete from users");
+//        jdbc.execute("delete from email");
     }
 
     @Test
     public void testDelete() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
         offersDao.saveOrUpdate(offer2);
         offersDao.saveOrUpdate(offer3);
         offersDao.saveOrUpdate(offer4);
@@ -94,10 +105,10 @@ public class OfferDaoTests {
 
     @Test
     public void testGetById() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
         offersDao.saveOrUpdate(offer1);
         offersDao.saveOrUpdate(offer2);
         offersDao.saveOrUpdate(offer3);
@@ -115,18 +126,18 @@ public class OfferDaoTests {
 
     @Test
     public void testCreateRetrieve() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
 
         offersDao.saveOrUpdate(offer1);
 
         List<Offer> offers1 = offersDao.getOffers();
         assertEquals("Should be one offer.", 1, offers1.size());
 
-        assertEquals("Retrieved offer should equal inserted offer.", offer1,
-                offers1.get(0));
+//        assertThat(offer1,is(equalTo(offers1.get(0))));
+        assertEquals("Retrieved offer should equal inserted offer.", offer1, offers1.get(0));
 
         offersDao.saveOrUpdate(offer2);
         offersDao.saveOrUpdate(offer3);
@@ -139,14 +150,17 @@ public class OfferDaoTests {
         assertEquals("Should be six offers for enabled users.", 6,
                 offers2.size());
 
+
+        Offer offerRetrieved1 = offersDao.getOffer(offer1.getId());
+        assertEquals(offerRetrieved1,offer1);
     }
 
     @Test
     public void testUpdate() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
         offersDao.saveOrUpdate(offer2);
         offersDao.saveOrUpdate(offer3);
         offersDao.saveOrUpdate(offer4);
@@ -163,10 +177,10 @@ public class OfferDaoTests {
 
     @Test
     public void testGetUsername() {
-        usersDao.create(user1);
-        usersDao.create(user2);
-        usersDao.create(user3);
-        usersDao.create(user4);
+        usersDao.saveOrUpdate(user1);
+        usersDao.saveOrUpdate(user2);
+        usersDao.saveOrUpdate(user3);
+        usersDao.saveOrUpdate(user4);
 
         offersDao.saveOrUpdate(offer1);
         offersDao.saveOrUpdate(offer2);

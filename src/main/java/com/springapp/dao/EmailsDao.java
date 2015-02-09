@@ -25,16 +25,16 @@ public class EmailsDao {
         return sessionFactory.getCurrentSession();
     }
 
-    @SuppressWarnings("unchecked")
-    public List<Email> getEmails(User user) {
-
-        Criteria criteria = session().createCriteria(Email.class);
-        criteria.createAlias("user","u");
-        criteria.add(Restrictions.eq("u.enabled",true));
-        criteria.add(Restrictions.eq("u",user));
-
-        return criteria.list();
-    }
+//    @SuppressWarnings("unchecked")
+//    public List<Email> getEmails(User user) {
+//
+//        Criteria criteria = session().createCriteria(Email.class);
+//        criteria.createAlias("user","u");
+//        criteria.add(Restrictions.eq("u.enabled",true));
+//        criteria.add(Restrictions.eq("u",user));
+//
+//        return criteria.list();
+//    }
 
 //    @SuppressWarnings("unchecked")
 //    public List<Offer> getOffers(String username) {
