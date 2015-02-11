@@ -1,6 +1,7 @@
 package com.springapp.service;
 
 import com.springapp.bean.Offer;
+import com.springapp.bean.PurchasedItem;
 import com.springapp.bean.User;
 import com.springapp.dao.OffersDao;
 import com.springapp.dao.UsersDao;
@@ -18,7 +19,7 @@ public class UsersService {
     @Autowired
     private UsersDao usersDao;
 
-    public void createUser(User user) {
+    public void saveOrUpdateUser(User user) {
         usersDao.saveOrUpdate(user);
 //        offersDao.saveOrUpdate(offer);
     }
@@ -34,5 +35,9 @@ public class UsersService {
     @Secured("ROLE_ADMIN")
     public List<User> getAllUsers() {
         return usersDao.getAllUsers();
+    }
+
+    public void addPurchasedItemList(List<PurchasedItem> purchasedItemList){
+        usersDao.addPurchasedItemList(purchasedItemList);
     }
 }

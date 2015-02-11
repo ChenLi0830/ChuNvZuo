@@ -26,16 +26,11 @@ public class OffersController {
     @Autowired
     private OffersService offersService;
 
-    @RequestMapping("scanemails")
-    public String scanEmails(ModelMap modelMap, @ModelAttribute("user") User user){
-
-        return null;
-    }
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public String showTest(ModelMap model, @RequestParam("id") String id) {
-        System.out.println("Id is:" + id);
-        return "home";
-    }
+//    @RequestMapping(value = "/home", method = RequestMethod.GET)
+//    public String showTest(ModelMap model, @RequestParam("id") String id) {
+//        System.out.println("Id is:" + id);
+//        return "home";
+//    }
 
     @RequestMapping("/offers")
     public String printWelcome(ModelMap model) {
@@ -79,7 +74,6 @@ public class OffersController {
             offersService.delete(offer.getId());
             return "offerdeleted";
         }
-
     }
 
 //	public String showHome(HttpSession httpSession){

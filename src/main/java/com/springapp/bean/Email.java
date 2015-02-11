@@ -14,6 +14,9 @@ import java.util.List;
 //@Table(name = "emails")
 public class Email {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
     @NotBlank
     @org.hibernate.validator.constraints.Email
     private String account;
@@ -27,6 +30,14 @@ public class Email {
     }
 
     public Email() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getAccount() {
