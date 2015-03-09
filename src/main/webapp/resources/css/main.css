@@ -1,5 +1,161 @@
 @CHARSET "US-ASCII";
 
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: 100;
+    line-height: 1.1;
+    color: inherit;
+}
+
+div.footer {
+    font-size: small;
+    color: gray;
+}
+
+div.content {
+    padding: 40px;
+    display: block;
+}
+
+header .row{
+    /*padding: 30px 80px 30px 80px;*/
+    /*float: right;*/
+    display: block;
+    /*min-width:1280px;*/
+    margin: 0 auto;
+}
+
+header {
+    padding-top: 10px;
+    padding-bottom: 200px;
+}
+
+.header .header-content {
+    margin-top: 240px;
+    text-align: center;
+    /*margin-left:-10%;*/
+}
+
+.header .header-content h1 {
+    /*line-height: 1.1;*/
+    color: #fff;
+    font-size: 52px;
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.50);
+}
+
+.header .header-content .subheading {
+    color: #E9E9E9;
+    margin-bottom: 35px;
+    margin-top: 0;
+    /*margin-left: 170px;*/
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.navbar-virgo{
+    margin-bottom: 20px;
+    margin-top: 3px;
+}
+
+.navbar-default{
+    color:#fff;
+    border: none;
+    background-image: none;
+    background-color: transparent;
+    -webkit-box-shadow:none;
+    box-shadow:none;
+}
+
+.header .nav li {
+    margin-left: 28px;
+    display: inline-block;
+}
+
+.header .nav li a {
+    font-size: 13px;
+    color: #fff;
+    font-weight: 200;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    /*background-color: inherit;*/
+    color: rgba(255,255,255,0.6);
+    transition: 0.3s; /* delays for 1 second */
+    -webkit-transition: 0.3s; /* for Safari & Chrome */
+}
+
+.navbar-default .navbar-toggle .icon-bar{
+    background-color: #fff;
+}
+
+.btn-trans {
+    background-color: rgba(255,255,255,0.2);
+}
+
+#SignUp:hover{
+    color:#fff;
+    background-color: rgba(255,255,255,0.3);
+}
+
+/*a.btn-trans:focus, a.btn-trans:hover {*/
+    /*background-color: rgba(255,255,255,0.5);*/
+    /*color:#fff;*/
+/*}*/
+
+
+.header .logo-container{
+    width: 58px;
+}
+
+.navbar-nav>li>a{
+    padding: 10px 15px 10px 15px;
+}
+
+/*div.header {*/
+    /*position: relative;*/
+    /*text-align: center;*/
+    /*width: 100%;*/
+    /*height: 40px;*/
+    /*background-color: red;*/
+/*}*/
+
+
+#homepage .header{
+    background-image: url("/static/images/bg_header_home2.png");
+    background-position: 50% center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    /*height: 100%;*/
+
+    /*-moz-box-shadow:    inset 150px 0px 180px 160px rgba(0,0,0,0.61);*/
+    /*box-shadow:         inset 150px 0px 180px 160px rgba(0,0,0,0.61);*/
+    /*min-width: 1280px;*/
+    /*display: block;*/
+}
+
+
+.navbar-brand{
+    padding:0;
+}
+/*@media (min-width: 768px) {*/
+    /*.header {*/
+        /*width: 750px;*/
+    /*}*/
+/*}*/
+/*@media (min-width: 992px) {*/
+    /*.header {*/
+        /*width: 970px;*/
+    /*}*/
+/*}*/
+/*@media (min-width: 1200px) {*/
+    /*.header {*/
+        /*width: 1170px;*/
+    /*}*/
+/*}*/
+
 
 .formtable {
     width: 600px;
@@ -14,7 +170,6 @@ input[type=text] {
 
 input[type=password] {
     width: 250px;
-
 }
 
 textarea {
@@ -52,23 +207,7 @@ p.error {
     font-size: medium;
 }
 
-div.footer {
-    font-size: small;
-    color: gray;
-}
 
-div.content {
-    position: relative;
-    padding: 40px;
-}
-
-div.header {
-    position: relative;
-    text-align: center;
-    width: 100%;
-    height: 40px;
-    background-color: red;
-}
 
 a.login {
     position: absolute;
